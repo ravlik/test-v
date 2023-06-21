@@ -1,15 +1,20 @@
-name: Keep the versions up-to-date
- 
+name: Log Version
+
 on:
-  release:
-    types: [published, edited]
+  push:
+    tags:
+      - '*.*.*'
+      - '*.*.*-beta'
 
 jobs:
-  actions-tagger:
-    runs-on: windows-latest
-    permissions:
-      contents: write
+  log_version:
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: Actions-R-Us/actions-tagger@latest
-        with:
-          publish_latest_tag: true
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log version
+        run: |
+          echo "Tag: ${{ github.ref }}"
+          echo "Version: ${{ github.ref_name }}"
